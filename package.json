@@ -1,0 +1,21 @@
+{
+  "name": "ersgn_vampire",
+  "version": "0.0.1",
+  "description": "discord bot",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon ./index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^1.7.1",
+    "discord.js": "^14.11.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "nodemon": "^2.0.22"
+  }
+}
