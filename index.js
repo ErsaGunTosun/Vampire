@@ -1,7 +1,9 @@
 import { config } from 'dotenv';
 import { Client, GatewayIntentBits, Routes } from 'discord.js';
-import { SlashCommandBuilder } from "@discordjs/builders"
 import { REST } from '@discordjs/rest';
+
+import WhereCommand from './slash/where.js';
+import RolesCommand from './slash/roles.js';
 
 config();
 const TOKEN = process.env.TOKEN;
@@ -33,17 +35,18 @@ client.on('interactionCreate', async (interaction) => {
         } else if (interaction.commandName === 'nerdesin') {
             await interaction.reply({ content: `Buradayım be burada,Sende buradasın.` });
         }
+        else if (interaction.commandName === 'addrole') {
+            await interaction.reply({ content: `${interaction.options.get('newrole').value} ne ?` });
+        }
     }
 });
 
 const main = async () => {
 
-    const WhereCommand = new SlashCommandBuilder()
-        .setName('nerede')
-        .setDescription('Ünlü bir yenilen adamın size birisini bulmaya yardım eder.')
-        .addStringOption(option => option.setName('kisi').setDescription('Bulunacak kişi').setRequired(true));
+
     const commands = [
-        WhereCommand.toJSON()
+        WhereCommand,
+        RolesCommand
     ];
     try {
         console.log('Started refreshing application (/) commands.');
