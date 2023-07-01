@@ -2,11 +2,12 @@ import { Client, GatewayIntentBits, Routes } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { config } from 'dotenv';
 
-// slash commands
-import WhereCommand from './slash/where.js';
-import RolesCommand from './slash/roles.js';
-import UserCommand from './slash/user.js';
-import channelCommand from './slash/channel.js';
+// Role commands
+import roleCreateCommand from './slash/Role/create.js';
+import roleDeleteCommand from './slash/Role/delete.js';
+import roleGiveCommand from './slash/Role/give.js';
+import roleTakeCommand from './slash/Role/take.js';
+
 
 // .env file get variables
 config();
@@ -44,6 +45,29 @@ client.on('interactionCreate', async (interaction) => {
         else if (interaction.commandName === 'addrole') {
             await interaction.reply({ content: `${interaction.options.get('newrole').value} ne ?` });
         }
+        else if(interaction.commandName === 'createrole'){
+            interaction.guild.roles.create({name: interaction.options.get('rolename').value, color: [interaction.options.get('colorredvalue').value, interaction.options.get('colorgreenvalue').value, interaction.options.get('colorbluevalue').value]})
+            .then(role => interaction.reply({content: `Role ${role} created with color ${role.color}`}))
+        }
+        else if(interaction.commandName === 'deleterole'){
+            interaction.guild.roles.cache.get(interaction.options.get('role').value).delete()
+            .then(role => {
+                interaction.reply({content: `Role ${role.name} deleted`})
+            })
+        }
+        else if(interaction.commandName === 'giverole'){
+            interaction.guild.members.cache.get(interaction.options.get('user').value).roles.add(interaction.options.get('rolename').value)
+            .then (members => {
+                interaction.reply({content: `Role ${interaction.guild.roles.cache.get(interaction.options.get('rolename').value)} given to ${members}`})
+            })
+        }
+        else if(interaction.commandName === 'takerole'){
+            interaction.guild.members.cache.get(interaction.options.get('user').value).roles.remove(interaction.options.get('rolename').value)
+            .then (members => {
+                interaction.reply({content: `Role ${interaction.guild.roles.cache.get(interaction.options.get('rolename').value)} taken to ${members}`})
+            })
+        }
+
     }
 });
 
@@ -52,10 +76,10 @@ client.on('interactionCreate', async (interaction) => {
 const main = async () => {
 
     const commands = [
-        WhereCommand,
-        RolesCommand,
-        UserCommand,
-        channelCommand
+        roleCreateCommand,
+        roleDeleteCommand,
+        roleGiveCommand,
+        roleTakeCommand
     ];
     try {
         console.log('Started refreshing application (/) commands.');
